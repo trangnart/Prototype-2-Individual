@@ -1,8 +1,8 @@
 title = "SPIDER MAN";
 //http://localhost:4000/?spiderman
 description = `
-[Hold]
- Hold web
+[Use web strike]
+ Press key H
 `;
 
 characters = [];
@@ -55,10 +55,10 @@ function update() {
   }
   if (
     p.y > 99 ||
-    (p.x > blueCircle.pos.x - 3 &&
-      p.x < blueCircle.pos.x + 3 &&
-      p.y > blueCircle.pos.y - 3 &&
-      p.y < blueCircle.pos.y + 3)
+    (p.x > blueCircle.pos.x - 7 &&
+      p.x < blueCircle.pos.x + 7 &&
+      p.y > blueCircle.pos.y - 7 &&
+      p.y < blueCircle.pos.y + 7)
   ) {
     play("lucky");
     end();
