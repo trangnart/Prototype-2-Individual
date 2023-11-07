@@ -1,8 +1,9 @@
 title = "SPIDER MAN";
 //http://localhost:4000/?spiderman
 description = `
-[Use web strike]
- Press key H
+Use web strike
+
+ [Press key H]
 `;
 
 characters = [];
@@ -22,7 +23,8 @@ let scr;
 let minDist;
 let dist;
 let nextAnchorDist;
-let blueCircle;
+let enemy;
+let startTicks = 0;
 
 document.addEventListener("keydown", (e) => {
   if (e.code === "KeyH") {
@@ -38,12 +40,13 @@ document.addEventListener("keyup", (e) => {
 });
 
 function update() {
-  if (!ticks) {
+  if (!startTicks) {
+    startTicks = ticks;
     piles = [];
     p = vec(99, (nextAnchorDist = 9));
     v = vec();
     anchor = nearest = null;
-    blueCircle = {
+    enemy = {
       pos: vec(rnd(10, 90), 0),
       radius: 10,
     };
@@ -55,12 +58,13 @@ function update() {
   }
   if (
     p.y > 99 ||
-    (p.x > blueCircle.pos.x - 7 &&
-      p.x < blueCircle.pos.x + 7 &&
-      p.y > blueCircle.pos.y - 7 &&
-      p.y < blueCircle.pos.y + 7)
+    (p.x > enemy.pos.x - 8 &&
+      p.x < enemy.pos.x + 8 &&
+      p.y > enemy.pos.y - 8 &&
+      p.y < enemy.pos.y + 8)
   ) {
     play("lucky");
+    startTicks = 0;
     end();
   }
   p.add(v.mul(0.99));
@@ -76,7 +80,7 @@ function update() {
     }
   });
 
-  color("red");
+  color("yellow");
   if (nearest) {
     box(nearest, 9, 9);
     if (isKeyPressing) {
@@ -101,14 +105,15 @@ function update() {
     piles.push(vec(99, rnd(66)));
   }
 
-  // Update and draw blue circle
-  blueCircle.pos.y += 1;
-  if (blueCircle.pos.y > 99) {
-    blueCircle.pos.y = 0;
-    blueCircle.pos.x = rnd(10, 90);
+  // Update and draw enemy
+  if (ticks - startTicks > 200) {
+  enemy.pos.y += 1;
+  if (enemy.pos.y > 99) {
+    enemy.pos.y = 0;
+    enemy.pos.x = rnd(10, 90);
   }
-  color("blue");
-  box(blueCircle.pos, blueCircle.radius, blueCircle.radius);
+  color("green");
+  box(enemy.pos, enemy.radius, enemy.radius);}
 
   color("black");
   piles = piles.filter((m) => {
