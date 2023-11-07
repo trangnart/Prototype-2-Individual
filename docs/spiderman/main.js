@@ -2,7 +2,7 @@ title = "SPIDER MAN";
 //http://localhost:4000/?spiderman
 description = `
 [Hold]
- Hold webb
+ Hold web
 `;
 
 characters = [];
@@ -22,18 +22,19 @@ let scr;
 let minDist;
 let dist;
 let nextAnchorDist;
+let blueCircle;
 
 document.addEventListener("keydown", (e) => {
-	if (e.code === "KeyH") {
-		isKeyPressing = true;
-	}
+  if (e.code === "KeyH") {
+    isKeyPressing = true;
+  }
 });
 
 document.addEventListener("keyup", (e) => {
-	if (e.code === "KeyH") {
-		isKeyPressing = false;
-		anchor = null;
-	}
+  if (e.code === "KeyH") {
+    isKeyPressing = false;
+    anchor = null;
+  }
 });
 
 function update() {
@@ -42,19 +43,30 @@ function update() {
     p = vec(99, (nextAnchorDist = 9));
     v = vec();
     anchor = nearest = null;
+    blueCircle = {
+      pos: vec(rnd(10, 90), 0),
+      radius: 10,
+    };
   }
   score += scr = (p.x > 30 ? (p.x - 30) * 0.1 : 0) + difficulty * 0.1;
   p.x -= scr;
   if ((v.y += 0.02) < 0 && p.y < 0) {
     v.y *= -1;
   }
-  if (p.y > 99) {
+  if (
+    p.y > 99 ||
+    (p.x > blueCircle.pos.x - 3 &&
+      p.x < blueCircle.pos.x + 3 &&
+      p.y > blueCircle.pos.y - 3 &&
+      p.y < blueCircle.pos.y + 3)
+  ) {
     play("lucky");
     end();
   }
   p.add(v.mul(0.99));
   color("red");
-  box(p, 7, 7);
+  box(p, 7, 7); // the player
+
   minDist = 99;
   piles.map((m) => {
     dist = abs(m.y - p.y);
@@ -63,6 +75,7 @@ function update() {
       nearest = m;
     }
   });
+
   color("red");
   if (nearest) {
     box(nearest, 9, 9);
@@ -78,13 +91,25 @@ function update() {
       anchor = null;
     }
   }
+
   if (!isKeyPressing) {
     anchor = null;
   }
+
   if ((nextAnchorDist -= scr) < 0) {
     nextAnchorDist += rnd(9, 66);
     piles.push(vec(99, rnd(66)));
   }
+
+  // Update and draw blue circle
+  blueCircle.pos.y += 1;
+  if (blueCircle.pos.y > 99) {
+    blueCircle.pos.y = 0;
+    blueCircle.pos.x = rnd(10, 90);
+  }
+  color("blue");
+  box(blueCircle.pos, blueCircle.radius, blueCircle.radius);
+
   color("black");
   piles = piles.filter((m) => {
     m.x -= scr;
