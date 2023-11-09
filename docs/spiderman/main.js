@@ -1,5 +1,5 @@
-title = "SPIDER MAN";
 //http://localhost:4000/?spiderman
+title = "SPIDER MAN";
 description = `
 Use web strike
 
@@ -25,6 +25,7 @@ let dist;
 let nextAnchorDist;
 let enemy;
 let startTicks = 0;
+let power = [];
 
 document.addEventListener("keydown", (e) => {
   if (e.code === "KeyH") {
@@ -69,7 +70,7 @@ function update() {
   }
   p.add(v.mul(0.99));
   color("red");
-  box(p, 7, 7); // the player
+  box(p, 7, 7); // spiderman
 
   minDist = 99;
   piles.map((m) => {
@@ -112,13 +113,28 @@ function update() {
     enemy.pos.y = 0;
     enemy.pos.x = rnd(10, 90);
   }
-  color("green");
+  color("green"); // enemy
   box(enemy.pos, enemy.radius, enemy.radius);}
 
-  color("black");
+  color("black"); // building
   piles = piles.filter((m) => {
     m.x -= scr;
     box(m, 5, 5);
     return m.x > 0;
   });
+
+  power.map((pwr) => {
+    pwr.x -= scr;
+    color("blue"); // power
+    const isColliding = box(pwr, 2, 2).isColliding.rect;
+    if (isColliding.red) {
+      score += 20;
+      power = power.filter((p) => p.x !== pwr.x || p.y !== pwr.y);
+    }
+  });
+
+  if (rnd() < difficulty * 0.01) {
+    const yPos = rnd(5, 95);
+    power.push(vec(99, yPos));
+  }
 }
