@@ -108,13 +108,14 @@ function update() {
 
   // Update and draw enemy
   if (ticks - startTicks > 200) {
-  enemy.pos.y += 1;
-  if (enemy.pos.y > 99) {
-    enemy.pos.y = 0;
-    enemy.pos.x = rnd(10, 90);
+    enemy.pos.y += 1;
+    if (enemy.pos.y > 99) {
+      enemy.pos.y = 0;
+      enemy.pos.x = rnd(10, 90);
+    }
+    color("green"); // enemy
+    box(enemy.pos, enemy.radius, enemy.radius);
   }
-  color("green"); // enemy
-  box(enemy.pos, enemy.radius, enemy.radius);}
 
   color("black"); // building
   piles = piles.filter((m) => {
