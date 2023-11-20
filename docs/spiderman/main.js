@@ -1,5 +1,5 @@
 //http://localhost:4000/?spiderman
-title = "SPIDER MAN";
+title = "WEB ESCAPE";
 description = `
 Use web strike
 
